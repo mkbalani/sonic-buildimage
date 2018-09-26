@@ -79,10 +79,7 @@ class SfpUtil(SfpUtilBase):
         eeprom_path = '/sys/bus/i2c/devices/{0}-0050/sfp_eeprom'
         for x in range(self._port_start, self._port_end + 1):
             port_eeprom_path = eeprom_path.format(self._port_to_i2c_mapping[x])
-            if x == 53:
-                self._port_to_eeprom_mapping[56] = port_eeprom_path  # ugly!!!!
-            else:
-                self._port_to_eeprom_mapping[x] = port_eeprom_path
+            self._port_to_eeprom_mapping[x] = port_eeprom_path
                 
             SfpUtilBase.__init__(self)
 
@@ -152,4 +149,10 @@ class SfpUtil(SfpUtilBase):
     def port_to_eeprom_mapping(self):
          return self._port_to_eeprom_mapping
 
-
+    def get_transceiver_change_event(self):
+        """
+        TODO: This function need to be implemented
+        when decide to support monitoring SFP(Xcvrd)
+        on this platform.
+        """
+        raise NotImplementedError

@@ -47,18 +47,26 @@ To clone the code repository recursively, assuming git version 1.9 or newer:
 
 To build SONiC installer image and docker images, run the following commands:
 
+    # Ensure the 'overlay' module is loaded on your development system
+    sudo modprobe overlay
+
+    # Enter the source directory
     cd sonic-buildimage
 
     # (Optional) Checkout a specific branch. By default, it uses master branch
     git checkout [branch_name]
 
-    # Execute make init once after cloning the repo, or fetched remote repo with submodule updates
+    # Execute make init once after cloning the repo, or after fetching remote repo with submodule updates
     make init
 
     # Execute make configure once to configure ASIC
     make configure PLATFORM=[ASIC_VENDOR]
 
-    make
+    # Build Debian Stretch required targets (Manual execution optional; will also be executed as part of the build)
+    BLDENV=stretch make stretch
+
+    # Build SONiC image
+    make all
 
  **NOTE**:
 
@@ -80,11 +88,13 @@ The SONiC installer contains all docker images needed. SONiC uses one image for 
 For Broadcom ASIC, we build ONIE and EOS image. EOS image is used for Arista devices, ONIE image is used for all other Broadcom ASIC based devices. 
 
     make configure PLATFORM=broadcom
+    # build debian stretch required targets
+    BLDENV=stretch make stretch
     # build ONIE image
     make target/sonic-broadcom.bin
     # build EOS image
     make target/sonic-aboot-broadcom.swi
- 
+
 You may find the rules/config file useful. It contains configuration options for the build process, like adding more verbosity or showing dependencies, username and password for base image etc.
 
 Every docker image is built and saved to target/ directory.
